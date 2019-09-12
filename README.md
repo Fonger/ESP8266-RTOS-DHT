@@ -18,6 +18,7 @@ Clone this project in your components folder.
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
+#include <esp_err.h>
 #include <dht/dht.h>
 
 #define DHT_GPIO 5 // D1 pin
@@ -25,17 +26,20 @@ Clone this project in your components folder.
 void temperature_task(void *arg)
 {
     ESP_ERROR_CHECK(dht_init(DHT_GPIO, false));
-    vTaskDelay(2000 / portTICK_RATE_MS);
+    vTaskDelay(2000 / portTICK_PERIOD_MS);
     while (1)
     {
-        float humidity = 0;
-        float temperature = 0;
-        if (dht_read_float_data(DHT_TYPE_DHT22, DHT_GPIO, &humidity, &temperature) == ESP_OK) {
-            printf("Humidity: g % Temperature: %g C\n", humidity, temperature);
+        int humidity = 0;
+        int temperature = 0;
+        if (dht_read_data(DHT_TYPE_DHT22, DHT_GPIO, &humidity, &temperature) == ESP_OK) {
+            // e.g. in dht22, 604 = 60.4%, 252 = 25.2 C
+            // If you want to print float data, you should run `make menuconfig`
+            // to enable full newlib and call dht_read_float_data() here instead
+            printf("Humidity: %d Temperature: %d\n", humidity, temperature);
         } else {
             printf("Fail to get dht temperature data\n")
         }
-        vTaskDelay(5000 / portTICK_RATE_MS);
+        vTaskDelay(5000 / portTICK_PERIOD_MS);
     }
     vTaskDelete(NULL);
 }
