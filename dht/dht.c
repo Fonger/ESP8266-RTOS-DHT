@@ -11,7 +11,7 @@
 #define DHT_DATA_BITS 40
 
 // #define DEBUG_DHT
-#ifndef DEBUG_DHT
+#ifdef DEBUG_DHT
 #define debug(fmt, ...) printf("%s" fmt "\n", "dht: ", ## __VA_ARGS__);
 #else
 #define debug(fmt, ...) /* (do nothing) */
