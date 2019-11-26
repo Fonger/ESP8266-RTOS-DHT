@@ -37,7 +37,7 @@ void temperature_task(void *arg)
             // to enable full newlib and call dht_read_float_data() here instead
             printf("Humidity: %d Temperature: %d\n", humidity, temperature);
         } else {
-            printf("Fail to get dht temperature data\n")
+            printf("Fail to get dht temperature data\n");
         }
         vTaskDelay(5000 / portTICK_PERIOD_MS);
     }
